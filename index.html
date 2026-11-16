@@ -161,19 +161,21 @@
 .roster-sync-guide .notice-exclamation{display:inline-flex;align-items:center;justify-content:center;flex:0 0 17px;width:17px;height:17px;border:1.8px solid #174d3d;border-radius:50%;font-size:12px;font-weight:800;line-height:1}
 .roster-sync-guide p{margin:5px 0;line-height:1.55}
 
-/* 날짜 선택은 그대로 두고, 오늘 버튼과 결과 제목은 모바일에서도 한 줄. */
-.date-summary-row{display:flex;align-items:center;gap:9px;margin-top:12px;min-width:0;width:100%}
-.date-summary-row #todayBtn{flex:0 0 auto;white-space:nowrap;padding:12px 15px}
-.date-summary-row .date-display{flex:1;min-width:0;display:block;margin:0;width:auto;white-space:nowrap;overflow:visible;padding:12px 8px;font-size:clamp(12px,1.5vw,18px);letter-spacing:-.25px}
+/* 오늘 버튼과 날짜 결과는 같은 크기로 한 줄 표시하고, 긴 문구는 가로 스크롤을 지원합니다. */
+.date-summary-row{--date-row-font:calc(clamp(12px,1.5vw,18px) + 2.667px);display:flex;align-items:center;gap:9px;margin-top:12px;min-width:0;width:100%}
+.date-summary-row #todayBtn{flex:0 0 auto;min-width:82px;white-space:nowrap;padding:12px 18px;font-size:var(--date-row-font)}
+.date-summary-row .date-display{flex:1;min-width:0;display:block;margin:0;width:auto;white-space:nowrap;overflow-x:auto;padding:12px 8px;font-size:var(--date-row-font);letter-spacing:-.25px}
+/* 안내 문구는 문장별 실제 줄바꿈을 유지합니다. */
+.guide-lines{white-space:pre-line;line-height:1.85}
 .bulk-case-guide{margin-bottom:0}
 .bulk-case-example{margin-top:12px;margin-bottom:10px;white-space:nowrap}
 .roster-action-tip{display:block;margin:11px 0 12px;font-weight:700;color:#23563c}
 .roster-sync-guide p+p{margin-top:12px}
 .dual-results .result-title .copy-all-large{padding:13px 22px;font-size:15px;min-height:47px;white-space:nowrap}
 @media(max-width:640px){
- .date-summary-row{gap:5px}
- .date-summary-row #todayBtn{font-size:12px;padding:9px 10px;min-height:36px}
- .date-summary-row .date-display{font-size:clamp(9px,2.75vw,13px);padding:10px 3px;letter-spacing:-.45px}
+ .date-summary-row{--date-row-font:calc(clamp(10px,2.75vw,13px) + 2.667px);gap:5px}
+ .date-summary-row #todayBtn{min-width:68px;padding:10px 15px;min-height:38px;font-size:var(--date-row-font)}
+ .date-summary-row .date-display{font-size:var(--date-row-font);padding:10px 3px;letter-spacing:-.45px}
  .dual-results .result-title .copy-all-large{padding:12px 20px;font-size:15px;min-height:46px}
  .date-controls{gap:6px}
  .date-controls .date-select{flex:1 1 58px;min-width:55px;width:auto;padding:9px 6px}
@@ -189,15 +191,18 @@
 <div class="date-summary-row"><button class="secondary" id="todayBtn" type="button">오늘</button><strong id="dateLabel" class="date-display" aria-live="polite"></strong></div></section>
 <section class="section hidden" id="sundaySection">
 <h2 id="sundayTitle">주일 예배위원 제외</h2>
-<p class="muted">선택한 날짜에 해당하는 주일 예배위원 명단을 붙여넣으세요. <b>해당 날짜의 군악대 출결 대상에서는 제외</b>되고, 출결 결과에는 <b>예배위원 사유</b>로 표시됩니다.</p>
+<p class="muted guide-lines">해당하는 주일 예배위원 명단을 붙여넣으세요. 붙여넣은 텍스트에서 이름만 인식하여 적용합니다.
+군악대 출결 대상에서는 제외되고, 출결 결과에 사유는 예배위원으로 표시됩니다. <strong>대장, 교관은 군악대 출결에 고정으로 적용됩니다.</strong></p>
 <label for="sundayPaste"><b>제외할 예배위원 명단 붙여넣기</b></label>
 <textarea id="sundayPaste" class="sunday-paste" spellcheck="false" placeholder=""></textarea>
 <div class="row" style="margin-top:10px"><button id="applySunday">주일 예배위원 명단 적용</button><button type="button" class="secondary" id="clearSundayPaste">입력창 비우기</button><span id="sundayCount" class="pill">제외 0명</span></div>
 <div id="sundayMessage" class="notice hidden" role="status"></div>
-<p class="hint">명단을 비우고 적용하면 제외 설정도 해제됩니다. 제외 명단에 포함된 사람은 출결 대상 인원수에 포함되지 않고, 최종 출결에는 이름/결/예배위원으로 표시됩니다. 조슬기, 최성빈은 제외됩니다.</p></section>
+</section>
 <section class="section hidden" id="emergencyCommitteeSection">
 <h2 id="emergencyRosterHeading">0/0 예배위원 명단</h2>
-<p class="hint">접속한 주의 일요일을 기준으로 예배위원 명단을 적용합니다. 최종출결 1은 해당 주 위원만, 최종출결 2는 전체 예배위원을 표시하며 위원이 아닌 사람은 이름/해당없음으로 나옵니다.</p>
+<p class="hint guide-lines">접속한 주의 일요일을 기준으로 예배위원 명단을 적용합니다.
+붙여넣은 텍스트에서 이름만 인식하여 적용합니다.
+최종출결 1은 해당 주 위원만, 최종출결 2는 전체 예배위원을 표시하며 대상이 아닌 사람은 이름/해당없음으로 나옵니다.</p>
 <label for="emergencyCommitteePaste"><b>해당 주 예배위원 명단 붙여넣기</b></label>
 <textarea id="emergencyCommitteePaste" class="sunday-paste" spellcheck="false" placeholder="Vn. 김계시&#10;Fl. 박계시"></textarea>
 <div class="row" style="margin-top:10px"><button type="button" id="applyEmergencyCommittee">예배위원 명단 적용</button><button type="button" class="secondary" id="clearEmergencyCommittee">입력창 비우기</button><span id="emergencyCommitteeCount" class="pill">출결 대상 0명</span></div>
@@ -741,8 +746,10 @@ function finalTitle(){
 }
 function teamCountLabel(){return activeMeeting==='tue-all'?'◆ 관현악 재적 현황':activeMeeting==='sat-strings'?'◆ 현악 명단':['sat-committee','emergency-committee'].includes(activeMeeting)?'◆ 관현악 예배위원 명단':'◆ 군악대 명단'}
 function teamStatusLine(name,p){
+ // 파트미보고는 결석 사유로 입력되었어도 최종출결 2에서 이름/파트미보고로 표시합니다.
+ if(p.status==='파트미보고'||p.reason==='파트미보고')return name+'/파트미보고';
  // 각 사람의 출결을 한 줄에 표시하며, 아직 기록이 없다면 미보고로 표시합니다.
- if(!Object.prototype.hasOwnProperty.call(state.people,name)&&p.status==='미보고')return name+'/미보고';
+ if(p.status==='미보고')return name+'/미보고';
  const fields=[name,p.status];
  if(p.status==='결'||p.status==='부분'){
   const reason=String(p.reason||'').trim(),time=String(p.time||'').trim();
